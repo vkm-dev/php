@@ -1,46 +1,52 @@
 <?php
 // popup message and redirect with js
 if (!function_exists('pop_message')) {
-   function pop_message($msg, $type="success", $redirectTo='') {
-      $color = (strtolower($type) == 'success') ? "green" : "red";
-      $type  = (strtolower($type) == 'success') ? "success!" : $type."!";
-      $jsRedirect = ($redirectTo != '') ? 'window.location.href="'.$redirectTo.'"' : ''; 
-      $html = '
-            <div class="pop_message_container">
-            <script>
-               function pop_message(show) {
-                  var show  = (show != "undefined") ? show : true;
-                  if (!show) {
-                     document.querySelector(".pop_message_container").remove();
-                     document.body.style.backgroundColor =  "";
-                     '.$jsRedirect.';
-                  }
-                  // code to prevent resubmission of form
-                  if ( window.history.replaceState ) {
-                     window.history.replaceState( null, null, window.location.href );
-                  }
-               }
-               document.body.style.backgroundColor =  "#00000082";
-            </script>
-            <div style="width: 100%;height: 100vh;background: #06060633;position: fixed;top: 0;left: 0;z-index: 999999;">
-               <div style="top:30%;width-100%;max-width: 390px;height: 200px;position: relative;z-index: 999999999;margin: 0 auto;border: 1px solid #ccc;box-shadow: 7px 7px 10px #00000073;background: #fff;">
-                  <br>
-                  <p style="color:'.$color.';text-align:center;font-size:24px;">'.strtoupper($type).'</p>
-                  <hr style="margin:0;padding:0;">
-                  <p style="font-size: 18px;margin:10px;text-align: center;">'.$msg.'</p>
-                  <div style="position: absolute;bottom: 0;width: 100%;padding: 10px;text-align: center;">
-                     <button onclick="pop_message(false)" style="background: #2084ff;color: #fff;font-size: 20px;border:1px solid #5bc0de;border-radius: 5px;box-shadow: 10px 10px 10px #ccc;margin: 0px 15px;width:60px;" onclick="">OK</button>
-                  </div>
-               </div>
-            </div>
-            </div>
-            ';
-      echo $html;
-   // sleep(1.75);
-   if ($redirectTo != '') {
-      die;
-   }   
-   }
+	function pop_message($msg, $type="success", $redirectTo=false) {
+		$color = (strtolower($type) == 'success') ? "green" : "red";
+		$type  = (strtolower($type) == 'success') ? "success!" : $type."!";
+		$jsRedirect = ($redirectTo) ? 'window.location.href="'.$redirectTo.'"' : ''; 
+		$bodyColor  = ($redirectTo) ? '#060606f2' : '';  // do not reset(blank color) if redirected to a url
+		$html = '
+			<div class="pop_message_container">
+			<script>
+				var redirectTo = "'.$redirectTo.'";
+				function pop_message(show) {
+					var show  = (show != "undefined") ? show : true;
+					if (!show) {
+						if (!redirectTo) {
+							document.querySelector(".pop_message_container").remove();
+						} else {
+							document.querySelector("#pop_msg_p").innerHTML = "Please wait...";
+							document.body.style.backgroundColor =  "'.$bodyColor.'";
+							'.$jsRedirect.';
+						}
+					}
+					// code to prevent resubmission of form
+					if ( window.history.replaceState ) {
+						window.history.replaceState( null, null, window.location.href );
+					}
+				}
+				document.body.style.backgroundColor =  "'.$bodyColor.'";
+			</script>
+			<div style="width: 100%;height: 100vh;background: #06060633;position: fixed;top: 0;left: 0;z-index: 999999;">
+				<div style="top:30%;width-100%;max-width: 390px;height: 200px;position: relative;z-index: 999999999;margin: 0 auto;border: 1px solid #ccc;box-shadow: 7px 7px 10px #00000073;background: #fff;">
+				<br>
+				<p style="color:'.$color.';text-align:center;font-size:24px;">'.strtoupper($type).'</p>
+				<hr style="margin:0;padding:0;">
+				<p style="font-size: 18px;margin:10px;text-align: center;" id="pop_msg_p">'.$msg.'</p>
+				<div style="position: absolute;bottom: 0;width: 100%;padding: 10px;text-align: center;">
+					<button onclick="pop_message(false)" style="background: #2084ff;color: #fff;font-size: 20px;border:1px solid #5bc0de;border-radius: 5px;box-shadow: 10px 10px 10px #ccc;margin: 0px 15px;width:60px;" onclick="">OK</button>
+				</div>
+				</div>
+			</div>
+			</div>
+			';
+		echo $html;
+		// sleep(1.75);
+		if ($redirectTo != '') {
+			die;
+		}   
+	}
 }
 
 function splitFullName($fullName) {

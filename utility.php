@@ -18,6 +18,18 @@ const IMAGE_HANDLERS = [
         'save' => 'imagegif'
     ]
 ];
+/**
+ * clean array data before insert to db
+ */
+if (!function_exists('mysql_clean_array')) {
+	function mysql_clean_array(&$data) {
+		array_walk_recursive($data, function (&$val, $key) {
+			$val = mysql_real_escape_string($val);
+		});
+	}
+}
+// clean data 
+// mysql_clean_array($_REQUEST);
 
 /**
  * @param $src - a valid file location

@@ -29,7 +29,8 @@ if (!function_exists('mysql_clean_array')) {
 	}
 }
 // clean data 
-// mysql_clean_array($_REQUEST);
+// $request = $_REQUEST;
+// mysql_clean_array($request); // use $request instead of $_REQUEST
 
 /**
  * @param $src - a valid file location

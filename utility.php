@@ -18,19 +18,6 @@ const IMAGE_HANDLERS = [
         'save' => 'imagegif'
     ]
 ];
-/**
- * clean array data before insert to db
- */
-if (!function_exists('mysql_clean_array')) {
-	function mysql_clean_array(&$data) {
-		array_walk_recursive($data, function (&$val, $key) {
-			$val = mysql_real_escape_string($val);
-		});
-	}
-}
-// clean data 
-// $request = $_REQUEST;
-// mysql_clean_array($request); // use $request instead of $_REQUEST
 
 /**
  * @param $src - a valid file location
@@ -137,3 +124,27 @@ function createThumbnail($src, $dest, $targetWidth, $targetHeight = null) {
 // Using this script you can now for example generate square 160 by 160 pixel thumbnails with the following command.
 
 createThumbnail('profile.jpg', 'profile_thumb.jpg', 160);
+
+
+/**
+ * clean array data before insert to db
+ */
+if (!function_exists('mysql_clean_array')) {
+	function mysql_clean_array(&$data) {
+		array_walk_recursive($data, function (&$val, $key) {
+			$val = mysql_real_escape_string($val);
+		});
+	}
+}
+// clean data 
+// $request = $_REQUEST;
+// mysql_clean_array($request); // use $request instead of $_REQUEST
+
+if (!function_exists('fileLog')) {
+    function fileLog($msg, $fileName='') {
+        $fileName = ($fileName) ? $fileName : "log-file.txt";
+        $logFile = fopen($fileName, "a+") or die("Unable to open file!");
+        fwrite($logFile, $msg);
+        fclose($logFile);
+    }
+}

@@ -1,0 +1,7 @@
+1. Before fetching data in unicode set this in top
+    mysql_query('SET character_set_results=utf8');
+    mysql_query($qry)
+
+2. To save unicode data in db set 
+    $conn = new mysqli(DB_HOST,DB_USER,DB_PASSWORD,DB_DATABSE);
+    mysqli_set_charset($conn, 'utf8'); 
